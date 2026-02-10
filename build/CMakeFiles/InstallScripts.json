@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/rodneybrown/CLionProjects/2dp/build/cmake_install.cmake",
+		"/Users/rodneybrown/CLionProjects/2dp/build/_deps/glm-build/cmake_install.cmake",
+		"/Users/rodneybrown/CLionProjects/2dp/build/_deps/glm-build/glm/cmake_install.cmake",
+		"/Users/rodneybrown/CLionProjects/2dp/build/vendored/SDL/cmake_install.cmake",
+		"/Users/rodneybrown/CLionProjects/2dp/build/vendored/SDL_image/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

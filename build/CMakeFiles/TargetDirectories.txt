@@ -1,0 +1,16 @@
+/Users/rodneybrown/CLionProjects/2dp/build/CMakeFiles/2dp.dir
+/Users/rodneybrown/CLionProjects/2dp/build/CMakeFiles/edit_cache.dir
+/Users/rodneybrown/CLionProjects/2dp/build/CMakeFiles/rebuild_cache.dir
+/Users/rodneybrown/CLionProjects/2dp/build/_deps/glm-build/CMakeFiles/edit_cache.dir
+/Users/rodneybrown/CLionProjects/2dp/build/_deps/glm-build/CMakeFiles/rebuild_cache.dir
+/Users/rodneybrown/CLionProjects/2dp/build/_deps/glm-build/glm/CMakeFiles/glm.dir
+/Users/rodneybrown/CLionProjects/2dp/build/_deps/glm-build/glm/CMakeFiles/edit_cache.dir
+/Users/rodneybrown/CLionProjects/2dp/build/_deps/glm-build/glm/CMakeFiles/rebuild_cache.dir
+/Users/rodneybrown/CLionProjects/2dp/build/vendored/SDL/CMakeFiles/SDL3-shared.dir
+/Users/rodneybrown/CLionProjects/2dp/build/vendored/SDL/CMakeFiles/SDL3_test.dir
+/Users/rodneybrown/CLionProjects/2dp/build/vendored/SDL/CMakeFiles/SDL_uclibc.dir
+/Users/rodneybrown/CLionProjects/2dp/build/vendored/SDL/CMakeFiles/edit_cache.dir
+/Users/rodneybrown/CLionProjects/2dp/build/vendored/SDL/CMakeFiles/rebuild_cache.dir
+/Users/rodneybrown/CLionProjects/2dp/build/vendored/SDL_image/CMakeFiles/SDL3_image-shared.dir
+/Users/rodneybrown/CLionProjects/2dp/build/vendored/SDL_image/CMakeFiles/edit_cache.dir
+/Users/rodneybrown/CLionProjects/2dp/build/vendored/SDL_image/CMakeFiles/rebuild_cache.dir

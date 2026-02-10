@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/2dp.dir/main.cpp.o -o 2dp  -Wl,-rpath,/Users/rodneybrown/CLionProjects/2dp/build -Wl,-rpath,/Users/rodneybrown/CLionProjects/2dp/build/_deps/glm-build/glm libSDL3_image.0.5.0.dylib libSDL3.0.dylib _deps/glm-build/glm/libglm.dylib
