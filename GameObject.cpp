@@ -14,8 +14,8 @@ GameObject::GameObject(const char *texturesheet, float x, float y ) {
 }
 
 void GameObject::Update() {
-     x_pos++;
-     y_pos++;
+     //x_pos++; slide
+     //y_pos++; slide
 
     srcR.h = 32;
     srcR.w = 32;
