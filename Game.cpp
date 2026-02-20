@@ -1,17 +1,14 @@
 #include "Game.hpp"
 #include "TextureManager.h"
-#include "GameObject.h"
 #include "map.h"
-#include "ECS.h"
-#include "Component.h"
+#include "ECS/Component.h"
 
 
-GameObject* player;
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
 Manager manager;
-auto& newPlayer(manager.addEntity());
+auto& Player(manager.addEntity());
 
 Game::Game() {
 
@@ -44,11 +41,9 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
             SDL_Log("SDL_render failed: %s", SDL_GetError());
             isRunning = false;
         }
-        player = new GameObject("textures/Reaper.png",0,0);
         map = new Map();
-
-        newPlayer.addComponent<PositionComponent>();
-        newPlayer.getComponent<PositionComponent>().setPos(500,500);
+        Player.addComponent<PositionComponent>(0,450);
+        Player.addComponent<SpriteComponent>("textures/Reaper.png");
     }
 
 
@@ -71,10 +66,9 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-    player -> Update();
+    manager.refresh();
     manager.update();
-    std::cout << newPlayer.getComponent<PositionComponent>().x() << ","
-          << newPlayer.getComponent<PositionComponent>().y() << std::endl;
+
 
 }
 
@@ -82,7 +76,7 @@ void Game::render() {
     SDL_RenderClear(renderer);
     // Add items to render
     map -> DrawMap();
-    player ->Render();
+    manager.draw();
     SDL_RenderPresent(renderer);
 }
 

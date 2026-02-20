@@ -23,8 +23,10 @@ add_executable(2dp WIN32 main.cpp
         GameObject.cpp
         map.h
         map.cpp
-        ECS.h
-        Component.h)
+        ECS/ECS.h
+        ECS/Component.h
+        "ECS/SpriteComponent.h"
+        ECS/PositionComponent.h)
 
 # Link to the actual SDL3 and glm libraries.
 target_link_libraries(2dp PRIVATE SDL3_image::SDL3_image SDL3::SDL3)
