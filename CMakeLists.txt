@@ -22,7 +22,9 @@ add_executable(2dp WIN32 main.cpp
         GameObject.h
         GameObject.cpp
         map.h
-        map.cpp)
+        map.cpp
+        ECS.h
+        Component.h)
 
 # Link to the actual SDL3 and glm libraries.
 target_link_libraries(2dp PRIVATE SDL3_image::SDL3_image SDL3::SDL3)
