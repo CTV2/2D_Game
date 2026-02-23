@@ -2,6 +2,35 @@
 #include "TextureManager.h"
 #include "map.h"
 #include "ECS/Component.h"
+#include <vector>
+
+
+// Temp stuff for testing, will be removed later
+std::vector<std::vector<int>> generateMap() {
+    const int rows = 20;
+    const int cols = 25;
+
+    std::vector<std::vector<int>> array(rows, std::vector<int>(cols));
+
+    for (int i = 0; i < rows; ++i) {
+        int value;
+        if (i > 5)
+            value = 0;
+        else if (i > 2)
+            value = 1;
+        else
+            value = 2;
+
+        for (int j = 0; j < cols; ++j) {
+            array[i][j] = value;
+        }
+    }
+
+    return array;
+}
+
+
+
 
 // Global variablesq
 Map* map;
@@ -59,7 +88,7 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
         }
 
         // Initialize map and player entity with position and sprite components
-        map = new Map();
+        map = new Map(generateMap());
         Player.addComponent<PositionComponent>(0,450);
         Player.addComponent<SpriteComponent>("textures/Reaper.png");
     }
@@ -96,9 +125,9 @@ void Game::update() {
 void Game::render() {
     // Clear previous render
     SDL_RenderClear(renderer);
-    
+
     // Add items to render
-    map -> DrawMap();
+    map->Draw_OBJ();
     manager.draw();
     SDL_RenderPresent(renderer);
 }
@@ -110,5 +139,4 @@ void Game::clean() {
     SDL_Quit();
     std::cout<<"Game Closed" << std::endl;
 }
-
 
