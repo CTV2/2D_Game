@@ -5,8 +5,13 @@
 #include "SDL3/SDL.h"
 #include  "SDL3_image/SDL_image.h"
 #include <iostream>
+#include <vector>
+
 class Game {
 public:
+    // Temp stuff for testing, will be removed later
+
+
     Game();
     ~Game();
     void init(const char* title,int width, int height, bool fullscreen);

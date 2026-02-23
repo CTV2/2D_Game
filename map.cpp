@@ -1,4 +1,3 @@
-// Implements tilemap data loading and rendering for dirt, grass, and water tiles.
 #include "map.h"
 #include "TextureManager.h"
 
@@ -73,4 +72,5 @@ void Map::DrawMap() {
         }
     }
 }
+
 
