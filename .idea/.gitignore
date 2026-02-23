@@ -10,7 +10,7 @@
 /httpRequests/
 # CMake build folder
 # CMake build folder
-/build/
+/build/*
 
 # CMake generated files
 CMakeCache.txt
