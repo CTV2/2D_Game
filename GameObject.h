@@ -1,3 +1,4 @@
+// Declares a basic textured object with update and render behavior.
 #ifndef INC_2DP_GAMEOBJECT_H
 #define INC_2DP_GAMEOBJECT_H
 #include "Game.hpp"

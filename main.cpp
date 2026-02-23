@@ -1,3 +1,4 @@
+// Entry point that initializes the game, runs the fixed-FPS loop, and shuts down cleanly.
 #include "Game.hpp"
 
 Game *game = nullptr;
@@ -39,4 +40,3 @@ int main(int argc,const char * argv[]) {
     game-> clean();
     return 0;
 }
-

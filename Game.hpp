@@ -1,3 +1,4 @@
+// Declares the Game class interface and shared renderer used across the project.
 #ifndef Game_hpp
 #define Game_hpp
 

@@ -1,3 +1,4 @@
+// Declares the Map class responsible for storing and drawing the 2D tile grid.
 #ifndef INC_2DP_MAP_H
 #define INC_2DP_MAP_H
 #include  "Game.hpp"

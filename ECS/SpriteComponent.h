@@ -1,6 +1,4 @@
-//
-// Created by Rodney Brown on 2/20/26.
-//
+// Implements an ECS render component that draws a texture at an entity's position.
 
 #ifndef INC_2DP_SPRITECOMPONENT_H_H
 #define INC_2DP_SPRITECOMPONENT_H_H
