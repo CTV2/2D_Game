@@ -115,6 +115,23 @@ void Game::handleEvents() {
 
 }
 
+// Checks for collision between player and map objects
+void Game::collision_player() {
+    for (GameObject& obj : map->objects) {
+        // Simple AABB collision detection
+        if (Player.getComponent<PositionComponent>().x() < obj.destR.x + obj.destR.w &&
+            Player.getComponent<PositionComponent>().x() + 16 > obj.destR.x &&
+            Player.getComponent<PositionComponent>().y() < obj.destR.y + obj.destR.h &&
+            Player.getComponent<PositionComponent>().y() + 16 > obj.destR.y) {
+                
+            // Collision detected, handle accordingly (e.g., stop movement, change texture, etc.)
+            std::cout << "Collision Detected!" << std::endl;
+        }
+    }
+
+}
+
+
 // Updates game state
 void Game::update() {
     manager.refresh();

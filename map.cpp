@@ -28,8 +28,18 @@ int base[20][25] = {
 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 };
 
+// Makes map base of give size
+Map::Map(int x, int y) {
+    this->height = x;
+    this->width = y;
 
+    srcR.x = srcR.y = 0;
+    srcR.w = destR.w = 32;
+    srcR.h = destR.h = 32;
+    destR.x = destR.y = 0;
+}
 
+// Make a map object based on 2D array, initializes textures
 Map::Map(const std::vector<std::vector<int>>& grid) {
 
     // height and width of map
@@ -50,8 +60,6 @@ Map::Map(const std::vector<std::vector<int>>& grid) {
     grass = TextureManager::LoadTexture("textures/grass.png");
     water = TextureManager::LoadTexture("textures/water.png");
 
-    // build_temp();
-    // LoadMap(base);
     srcR.x = srcR.y = 0;
     srcR.w = destR.w = 32;
     srcR.h = destR.h = 32;
@@ -88,42 +96,6 @@ void Map::Init_obj(const std::vector<std::vector<int>>& arr, std::vector<GameObj
 }
 
 
-// void Map::LoadMap(int arr[20][25]) {
-//     for (int row = 0; row < 20; ++row) {
-//         for (int col = 0; col < 25; ++col) {
-//             map[row][col] = arr[row][col];
-//         }
-//     }
-// }
-
-// void Map::DrawMap() {
-
-//     int type = 0;
-//     for (int row = 0; row < 20; ++row) {
-//         for (int col = 0; col < 25; ++col) {
-//             type = map[row][col];
-
-//             destR.x = col * 32;
-//             destR.y = row * 32;
-
-//             switch (type) {
-//                 case 0:
-//                     TextureManager::Draw(water,srcR,destR);
-//                     break;
-//                 case 1:
-//                     TextureManager::Draw(grass,srcR,destR);
-//                     break;
-//                 case 2:
-//                     TextureManager::Draw(dirt,srcR,destR);
-//                     break;
-//                 default:
-//                     break;
-
-//             }
-//         }
-//     }
-// }
-
 void Map::Draw_OBJ() {
 
     // Loops through vector of objects and renders each one
@@ -134,4 +106,7 @@ void Map::Draw_OBJ() {
 }
 
 
-
+void Map::CreateMap_OBJ(string texture, float x, float y, ) {
+    GameObject obj(TextureManager::LoadTexture(texture.c_str()), x, y);
+    this->objects.push_back(obj);
+}

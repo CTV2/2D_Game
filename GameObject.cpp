@@ -12,6 +12,7 @@ GameObject::GameObject(const char *texturesheet, float x, float y ) {
     x_pos = x;
     y_pos = y;
 
+
 }
 
 GameObject::GameObject() {
@@ -30,8 +31,7 @@ void GameObject::ChangePos(float x, float y) {
     this->y_pos = y;
 }
 void GameObject::Update() {
-     //x_pos++; slide
-     //y_pos++; slide
+
 
     srcR.h = 32;
     srcR.w = 32;

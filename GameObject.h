@@ -15,6 +15,7 @@ public:
 private:
     float x_pos;
     float y_pos;
+    float lane;
 
     SDL_Texture* objTexture;
     SDL_FRect srcR,destR;
