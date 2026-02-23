@@ -85,7 +85,7 @@ class Entity {
     ComponentArray componentArray;
     ComponentBitSet componentBitSet;
 };
-
+//
 class Manager {
     public:
     // Runs update() on every currently managed entity.
