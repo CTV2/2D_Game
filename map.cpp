@@ -50,12 +50,12 @@ Map::Map(const std::vector<std::vector<int>>& grid) {
 
     // Gives each map its own OBJ map
     this->objects.resize(height*width);
-   
+
 
     // Updates OBJ map based on 2D array
     Init_obj(grid, this->objects);
-    
-    
+
+
     dirt = TextureManager::LoadTexture("textures/dirt.png");
     grass = TextureManager::LoadTexture("textures/grass.png");
     water = TextureManager::LoadTexture("textures/water.png");

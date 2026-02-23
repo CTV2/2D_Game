@@ -1,6 +1,4 @@
-//
-// Created by Rodney Brown on 2/20/26.
-//
+// Implements an ECS component that stores and exposes entity 2D position values.
 
 #ifndef INC_2DP_POSITIONCOMPONENT_H
 #define INC_2DP_POSITIONCOMPONENT_H

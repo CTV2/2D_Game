@@ -1,6 +1,4 @@
-//
-// Created by Rodney Brown on 2/17/26.
-//
+// Defines the  ECS framework: Component, Entity, and Manager types.
 
 #ifndef INC_2DP_ECS_H
 #define INC_2DP_ECS_H
@@ -87,15 +85,18 @@ class Entity {
     ComponentArray componentArray;
     ComponentBitSet componentBitSet;
 };
-
+//
 class Manager {
     public:
+    // Runs update() on every currently managed entity.
     void update() {
         for (auto& e : entities) e -> update();
     }
+    // Runs draw() on every currently managed entity.
     void draw() {
         for (auto& e : entities) e -> draw();
     }
+    // Removes entities that were marked inactive via Entity::destroy().
     void refresh() {
         entities.erase(std::remove_if(std::begin(entities), std::end(entities),
             [](const std::unique_ptr<Entity>&mEntity) {
@@ -104,6 +105,7 @@ class Manager {
             std::end(entities));
     }
 
+    // Creates, stores, and returns a new entity owned by the manager.
     Entity& addEntity() {
         Entity* e = new Entity();
         std::unique_ptr<Entity> uPtr{e};
@@ -111,6 +113,7 @@ class Manager {
         return *e;
     }
     private:
+    // Owning container for all active/inactive entities until refresh() compacts it.
     std::vector<std::unique_ptr<Entity>> entities;
 
 };

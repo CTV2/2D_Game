@@ -1,6 +1,4 @@
-//
-// Created by Rodney Brown on 2/20/26.
-//
+// Aggregates ECS component headers used by the game (position and sprite components).
 
 #ifndef INC_2DP_COMPONENT_H
 #define INC_2DP_COMPONENT_H

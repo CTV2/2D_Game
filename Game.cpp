@@ -142,7 +142,7 @@ void Game::update() {
 void Game::render() {
     // Clear previous render
     SDL_RenderClear(renderer);
-    
+
     // Add items to render
     map->Draw_OBJ();
     manager.draw();
@@ -156,5 +156,4 @@ void Game::clean() {
     SDL_Quit();
     std::cout<<"Game Closed" << std::endl;
 }
-
 

@@ -1,3 +1,4 @@
+// Defines a renderable game object that loads a texture and updates its source/destination rectangles.
 #include "GameObject.h"
 #include "TextureManager.h"
 
@@ -51,4 +52,3 @@ void GameObject::PrintPos() {
 void GameObject::Render() {
     SDL_RenderTexture(Game::renderer,objTexture,NULL,&destR);
 }
-

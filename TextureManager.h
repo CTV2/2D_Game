@@ -1,3 +1,4 @@
+// Declares static texture utility functions used by map and sprite rendering code.
 #ifndef Texture_man
 #define Texture_man
 #include  "Game.hpp"
