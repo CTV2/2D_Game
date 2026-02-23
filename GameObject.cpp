@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 
 
+
 GameObject::~GameObject() {
 
 }
@@ -13,6 +14,21 @@ GameObject::GameObject(const char *texturesheet, float x, float y ) {
 
 }
 
+GameObject::GameObject() {
+    objTexture = NULL;
+    x_pos = 0.0f;
+    y_pos = 0.0f;
+}
+
+
+void GameObject::ChangeTexturePreload(SDL_Texture* text) {
+    this->objTexture = text;
+}
+
+void GameObject::ChangePos(float x, float y) {
+    this->x_pos = x;
+    this->y_pos = y;
+}
 void GameObject::Update() {
      //x_pos++; slide
      //y_pos++; slide
@@ -26,6 +42,9 @@ void GameObject::Update() {
     destR.y = y_pos;
     destR.w = srcR.w * 2;
     destR.h = srcR.h * 2;
+}
+void GameObject::PrintPos() {
+    std::cout << "x_pos: " << x_pos << ", y_pos: " << y_pos << std::endl;
 }
 
 
