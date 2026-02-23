@@ -9,4 +9,30 @@
 # Editor-based HTTP Client requests
 /httpRequests/
 # CMake build folder
+# CMake build folder
 /build/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# OS files
+*.exe
+*.dll
+*.so
+*.dylib
+*.o
+*.obj
+*.pdb
+*.log
+*.idb
+*.ilk
+*.swp
+
+# IDE files
+.vscode/
+.idea/
+*.sln
+*.vcxproj*
