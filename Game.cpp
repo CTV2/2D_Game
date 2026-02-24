@@ -89,7 +89,7 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
 
         // Initialize map and player entity with position and sprite components
         map = new Map(generateMap());
-        Player.addComponent<PositionComponent>(0,450);
+        Player.addComponent<PositionComponent>();
         Player.addComponent<SpriteComponent>("textures/Reaper.png");
     }
 }
@@ -133,6 +133,14 @@ void Game::handleEvents() {
 
 // Updates game state
 void Game::update() {
+
+    // moves the player down at a constant rate until hitting bottom of screen
+    auto& position = Player.getComponent<PositionComponent>();
+    const float fallSpeed = 0.25; // change this to speed or slow
+    if (position.y() < 480 - fallSpeed) {
+        position.setPos(position.x(), position.y() + fallSpeed);
+        std::cout << position.y() << std::endl;
+    }
     manager.refresh();
     manager.update();
 }
@@ -155,4 +163,3 @@ void Game::clean() {
     SDL_Quit();
     std::cout<<"Game Closed" << std::endl;
 }
-
