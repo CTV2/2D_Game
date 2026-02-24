@@ -107,6 +107,22 @@ void Game::handleEvents() {
             case SDL_EVENT_QUIT:
                 isRunning = false;
                 break;
+            //key is pressed
+            case SDL_EVENT_KEY_DOWN:
+                switch (event.key.key){
+                    case SDLK_W:
+                        //jump
+                        break;
+                    case SDLK_A:
+                        //move left
+                        break;
+                    case SDLK_D:
+                        //move right
+                        break;
+                    default:
+                        break;
+                }
+                break;
             default:
                 break;
         }
