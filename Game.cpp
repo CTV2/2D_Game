@@ -114,10 +114,26 @@ void Game::handleEvents() {
                         //jump
                         break;
                     case SDLK_A:
-                        //move left
+                        {
+                            //move left
+                            auto& position = Player.getComponent<PositionComponent>();
+                            const float moveDist = 5.0; // change this to speed or slow
+                            if (position.x() > -30 - moveDist) {
+                                position.setPos(position.x() - moveDist, position.y());
+                                std::cout << position.x() << std::endl;
+                            }
+                        }
                         break;
                     case SDLK_D:
-                        //move right
+                        {
+                            //move right
+                            auto& position = Player.getComponent<PositionComponent>();
+                            const float moveDist = 5.0; // change this to speed or slow
+                            if (position.x() < 665 - moveDist) {
+                                position.setPos(position.x() + moveDist, position.y());
+                                std::cout << position.x() << std::endl;
+                            }
+                        }
                         break;
                     default:
                         break;
@@ -136,10 +152,10 @@ void Game::update() {
 
     // moves the player down at a constant rate until hitting bottom of screen
     auto& position = Player.getComponent<PositionComponent>();
-    const float fallSpeed = 0.25; // change this to speed or slow
+    const float fallSpeed = 0.5; // change this to speed or slow
     if (position.y() < 480 - fallSpeed) {
         position.setPos(position.x(), position.y() + fallSpeed);
-        std::cout << position.y() << std::endl;
+        //std::cout << position.y() << std::endl;
     }
     manager.refresh();
     manager.update();
