@@ -109,34 +109,30 @@ void Game::handleEvents() {
                 break;
             //key is pressed
             case SDL_EVENT_KEY_DOWN:
-                switch (event.key.key){
-                    case SDLK_W:
-                        //jump
-                        break;
-                    case SDLK_A:
-                        {
-                            //move left
-                            auto& position = Player.getComponent<PositionComponent>();
-                            const float moveDist = 5.0; // change this to speed or slow
-                            if (position.x() > -30 - moveDist) {
-                                position.setPos(position.x() - moveDist, position.y());
-                                std::cout << position.x() << std::endl;
-                            }
-                        }
-                        break;
-                    case SDLK_D:
-                        {
-                            //move right
-                            auto& position = Player.getComponent<PositionComponent>();
-                            const float moveDist = 5.0; // change this to speed or slow
-                            if (position.x() < 665 - moveDist) {
-                                position.setPos(position.x() + moveDist, position.y());
-                                std::cout << position.x() << std::endl;
-                            }
-                        }
-                        break;
-                    default:
-                        break;
+                if (event.key.key == SDLK_W) {
+                    //jump, change logic later to say if not falling
+                    auto& position = Player.getComponent<PositionComponent>();
+                    if(fallSpeed >= 1.0 && position.y() > fallSpeed){
+                        fallSpeed = -10.0;
+                    }
+                }
+                if (event.key.key == SDLK_A) {
+                    //move left
+                    auto& position = Player.getComponent<PositionComponent>();
+                    const float moveDist = 5.0; // change this to speed or slow
+                    if (position.x() > -30 - moveDist) {
+                         position.setPos(position.x() - moveDist, position.y());
+                         //std::cout << position.x() << std::endl;
+                    }
+                }
+                if (event.key.key == SDLK_D) {
+                    //move right
+                    auto& position = Player.getComponent<PositionComponent>();
+                    const float moveDist = 5.0; // change this to speed or slow
+                    if (position.x() < 665 - moveDist) {
+                       position.setPos(position.x() + moveDist, position.y());
+                       //std::cout << position.x() << std::endl;
+                    }
                 }
                 break;
             default:
@@ -152,10 +148,17 @@ void Game::update() {
 
     // moves the player down at a constant rate until hitting bottom of screen
     auto& position = Player.getComponent<PositionComponent>();
-    const float fallSpeed = 0.5; // change this to speed or slow
     if (position.y() < 480 - fallSpeed) {
-        position.setPos(position.x(), position.y() + fallSpeed);
+        //Dont update if jumping above screen
+        if(!(fallSpeed < 0 && position.y() < fallSpeed)){
+            position.setPos(position.x(), position.y() + fallSpeed);
+        }
+        
         //std::cout << position.y() << std::endl;
+    }
+    //This controls the fastest falling. Adjust the if statement to make faster/slower max fall
+    if (fallSpeed < 10.0) {
+        fallSpeed += 1.0;
     }
     manager.refresh();
     manager.update();
