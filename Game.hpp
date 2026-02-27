@@ -20,6 +20,7 @@ public:
     void render();
     void clean(); //mem cleaner
     bool running() {return isRunning;} // continue loop
+    void collision_player(); // collision check for player and map objects
 
     static SDL_Renderer* renderer;
 private:
