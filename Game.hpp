@@ -10,7 +10,7 @@
 class Game {
 public:
     // Temp stuff for testing, will be removed later
-
+    float fallSpeed = 0.5; // change this to speed or slow
 
     Game();
     ~Game();

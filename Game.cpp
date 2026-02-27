@@ -89,7 +89,7 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
 
         // Initialize map and player entity with position and sprite components
         map = new Map(generateMap());
-        Player.addComponent<PositionComponent>(0,450);
+        Player.addComponent<PositionComponent>();
         Player.addComponent<SpriteComponent>("textures/Reaper.png");
     }
 }
@@ -106,6 +106,34 @@ void Game::handleEvents() {
         switch (event.type) {
             case SDL_EVENT_QUIT:
                 isRunning = false;
+                break;
+            //key is pressed
+            case SDL_EVENT_KEY_DOWN:
+                if (event.key.key == SDLK_W) {
+                    //jump, change logic later to say if not falling
+                    auto& position = Player.getComponent<PositionComponent>();
+                    if(fallSpeed >= 1.0 && position.y() > fallSpeed){
+                        fallSpeed = -10.0;
+                    }
+                }
+                if (event.key.key == SDLK_A) {
+                    //move left
+                    auto& position = Player.getComponent<PositionComponent>();
+                    const float moveDist = 5.0; // change this to speed or slow
+                    if (position.x() > -30 - moveDist) {
+                         position.setPos(position.x() - moveDist, position.y());
+                         //std::cout << position.x() << std::endl;
+                    }
+                }
+                if (event.key.key == SDLK_D) {
+                    //move right
+                    auto& position = Player.getComponent<PositionComponent>();
+                    const float moveDist = 5.0; // change this to speed or slow
+                    if (position.x() < 665 - moveDist) {
+                       position.setPos(position.x() + moveDist, position.y());
+                       //std::cout << position.x() << std::endl;
+                    }
+                }
                 break;
             default:
                 break;
@@ -134,6 +162,21 @@ void Game::collision_player() {
 
 // Updates game state
 void Game::update() {
+
+    // moves the player down at a constant rate until hitting bottom of screen
+    auto& position = Player.getComponent<PositionComponent>();
+    if (position.y() < 480 - fallSpeed) {
+        //Dont update if jumping above screen
+        if(!(fallSpeed < 0 && position.y() < fallSpeed)){
+            position.setPos(position.x(), position.y() + fallSpeed);
+        }
+        
+        //std::cout << position.y() << std::endl;
+    }
+    //This controls the fastest falling. Adjust the if statement to make faster/slower max fall
+    if (fallSpeed < 10.0) {
+        fallSpeed += 1.0;
+    }
     manager.refresh();
     manager.update();
 }
@@ -156,4 +199,3 @@ void Game::clean() {
     SDL_Quit();
     std::cout<<"Game Closed" << std::endl;
 }
-

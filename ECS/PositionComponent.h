@@ -9,14 +9,14 @@ public:
         xpos = 0;
         ypos = 0;
     }
-    PositionComponent(int x, int y) {
+    PositionComponent(float x, float y) {
         xpos = x;
         ypos = y;
     }
-    int x() {
+    float x() {
         return xpos;
     }
-    int y() {
+    float y() {
         return ypos;
     }
     void init() override {
@@ -25,13 +25,13 @@ public:
     void update() override {
         // Position is externally controlled.
     }
-    void setPos(int x, int y) {
+    void setPos(float x, float y) {
         xpos = x;
         ypos = y;
     }
 private:
-    int xpos;
-    int ypos;
+    float xpos;
+    float ypos;
 };
 
 #endif //INC_2DP_POSITIONCOMPONENT_H
