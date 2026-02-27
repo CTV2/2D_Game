@@ -29,7 +29,7 @@ int base[20][25] = {
 };
 
 // Makes map base of give size
-Map::Map(int x, int y) {
+Map::Map(float x, float y, const char* texture) {
     this->height = x;
     this->width = y;
 
@@ -37,6 +37,10 @@ Map::Map(int x, int y) {
     srcR.w = destR.w = 32;
     srcR.h = destR.h = 32;
     destR.x = destR.y = 0;
+  
+    GameObject obj(texture, x, y);
+    this->objects.push_back(obj);
+    this->objects[0].Height_Width(25*32,20*32);
 }
 
 // Make a map object based on 2D array, initializes textures
@@ -106,7 +110,8 @@ void Map::Draw_OBJ() {
 }
 
 
-void Map::CreateMap_OBJ(string texture, float x, float y, ) {
-    GameObject obj(TextureManager::LoadTexture(texture.c_str()), x, y);
-    this->objects.push_back(obj);
-}
+// void Map::CreateMap_OBJ(const char* texture, float x, float y) {
+    
+// }
+
+

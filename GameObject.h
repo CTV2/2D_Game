@@ -13,10 +13,12 @@ public:
     void ChangeTexturePreload(SDL_Texture* text);
     void ChangePos(float x, float y);
     void PrintPos();
+    void Height_Width(float W, float H);
 private:
     float x_pos;
     float y_pos;
-    float lane;
+    float width_mod;
+    float height_mod;
 
     SDL_Texture* objTexture;
     SDL_FRect srcR,destR;

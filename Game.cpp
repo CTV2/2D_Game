@@ -34,6 +34,7 @@ std::vector<std::vector<int>> generateMap() {
 
 // Global variablesq
 Map* map;
+Map* background;
 
 SDL_Renderer* Game::renderer = nullptr;
 Manager manager;
@@ -88,6 +89,7 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
         }
 
         // Initialize map and player entity with position and sprite components
+        // background = new Map(25*32,20*32,"textures/des.jpg");
         map = new Map(generateMap());
         Player.addComponent<PositionComponent>(0,450);
         Player.addComponent<SpriteComponent>("textures/Reaper.png");
@@ -117,17 +119,17 @@ void Game::handleEvents() {
 
 // Checks for collision between player and map objects
 void Game::collision_player() {
-    for (GameObject& obj : map->objects) {
+    // for (GameObject& obj : map->objects) {
         // Simple AABB collision detection
-        if (Player.getComponent<PositionComponent>().x() < obj.destR.x + obj.destR.w &&
-            Player.getComponent<PositionComponent>().x() + 16 > obj.destR.x &&
-            Player.getComponent<PositionComponent>().y() < obj.destR.y + obj.destR.h &&
-            Player.getComponent<PositionComponent>().y() + 16 > obj.destR.y) {
+    //     if (Player.getComponent<PositionComponent>().x() < obj.destR.x + obj.destR.w &&
+    //         Player.getComponent<PositionComponent>().x() + 16 > obj.destR.x &&
+    //         Player.getComponent<PositionComponent>().y() < obj.destR.y + obj.destR.h &&
+    //         Player.getComponent<PositionComponent>().y() + 16 > obj.destR.y) {
                 
-            // Collision detected, handle accordingly (e.g., stop movement, change texture, etc.)
-            std::cout << "Collision Detected!" << std::endl;
-        }
-    }
+    //         // Collision detected, handle accordingly (e.g., stop movement, change texture, etc.)
+    //         std::cout << "Collision Detected!" << std::endl;
+    //     }
+    // }
 
 }
 
@@ -144,7 +146,9 @@ void Game::render() {
     SDL_RenderClear(renderer);
 
     // Add items to render
-    map->Draw_OBJ();
+
+    background->Draw_OBJ();
+    // map->Draw_OBJ();
     manager.draw();
     SDL_RenderPresent(renderer);
 }
