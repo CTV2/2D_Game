@@ -106,7 +106,7 @@ void Map::Draw_OBJ() {
 }
 
 
-void Map::CreateMap_OBJ(string texture, float x, float y, ) {
-    GameObject obj(TextureManager::LoadTexture(texture.c_str()), x, y);
-    this->objects.push_back(obj);
-}
+// void Map::CreateMap_OBJ(string texture, float x, float y, ) {
+//     GameObject obj(TextureManager::LoadTexture(texture.c_str()), x, y);
+//     this->objects.push_back(obj);
+// }

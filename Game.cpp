@@ -144,18 +144,21 @@ void Game::handleEvents() {
 }
 
 // Checks for collision between player and map objects
-void Game::collision_player() {
+bool Game::collision_player(PositionComponent Player) {
     for (GameObject& obj : map->objects) {
         // Simple AABB collision detection
-        if (Player.getComponent<PositionComponent>().x() < obj.destR.x + obj.destR.w &&
-            Player.getComponent<PositionComponent>().x() + 16 > obj.destR.x &&
-            Player.getComponent<PositionComponent>().y() < obj.destR.y + obj.destR.h &&
-            Player.getComponent<PositionComponent>().y() + 16 > obj.destR.y) {
+        if (Player.x() < obj.GetXPos() + 64 &&
+            Player.x() + 16 > obj.GetXPos() &&
+            Player.y() < obj.GetYPos() + 64 &&
+            Player.y() + 16 > obj.GetYPos()) {
                 
             // Collision detected, handle accordingly (e.g., stop movement, change texture, etc.)
             std::cout << "Collision Detected!" << std::endl;
+            
+            return true;
         }
     }
+    return false;
 
 }
 
@@ -177,6 +180,7 @@ void Game::update() {
     if (fallSpeed < 10.0) {
         fallSpeed += 1.0;
     }
+    collision_player(position);
     manager.refresh();
     manager.update();
 }

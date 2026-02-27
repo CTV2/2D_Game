@@ -13,6 +13,8 @@ public:
     void ChangeTexturePreload(SDL_Texture* text);
     void ChangePos(float x, float y);
     void PrintPos();
+    int GetXPos();
+    int GetYPos();
 private:
     float x_pos;
     float y_pos;
