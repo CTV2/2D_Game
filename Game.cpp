@@ -32,18 +32,28 @@ std::vector<std::vector<int>> generateMap() {
 
 
 
-// Global variablesq
-Map* map;
-
 SDL_Renderer* Game::renderer = nullptr;
 Manager manager;
 auto& Player(manager.addEntity());
+auto& Tree_0(manager.addEntity());
+auto& Tree_1(manager.addEntity());
+auto& Tree_2(manager.addEntity());
+auto& Spikes(manager.addEntity());
 
 // Constructor and Destructor  < -------- Not sure if these are necessary, but they are here for now.
 Game::Game() {
+    map = nullptr;
 }
 Game::~Game() {
 }
+
+bool collides(const SDL_FRect& a, const SDL_FRect& b) {
+    if (a.x + a.w <= b.x || b.x + b.w <= a.x) return false;
+    if (a.y + a.h <= b.y || b.y + b.h <= a.y) return false;
+    return true;
+
+}
+
 
 // Creates instance of game
 void Game::init(const char *title,int width, int height, bool fullscreen) {
@@ -78,7 +88,7 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
         renderer = SDL_CreateRenderer(window,NULL);
         if (renderer) {
             std::cout << "Render Created" << std::endl;
-            SDL_SetRenderDrawColor(renderer,255,255,255,255);
+            SDL_SetRenderDrawColor(renderer,0,0,0,255);
             isRunning = true;
         }
         else {
@@ -90,6 +100,18 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
         // Initialize map and player entity with position and sprite components
         map = new Map(generateMap());
         Player.addComponent<PositionComponent>();
+        Player.addComponent<ColliderComponent>(16, 16);
+        Tree_0.addComponent<PositionComponent>(0,430);
+        Tree_1.addComponent<PositionComponent>(500,430);
+        Tree_2.addComponent<PositionComponent>(1000,430);
+        Tree_0.addComponent<ColliderComponent>(120, 120, 15, 10);
+        Tree_1.addComponent<ColliderComponent>(70, 120, 15, 10);
+        Tree_2.addComponent<ColliderComponent>(70, 120, 15, 10);
+        Spikes.addComponent<PositionComponent>();
+        //Spikes.addComponent<SpriteComponent>("textures/spikes.png");
+        Tree_0.addComponent<SpriteComponent>("textures/up_tree.png",0.50);
+        Tree_1.addComponent<SpriteComponent>("textures/up_tree.png",0.50);
+        Tree_2.addComponent<SpriteComponent>("textures/up_tree.png",0.50);
         Player.addComponent<SpriteComponent>("textures/Reaper.png");
     }
 }
@@ -144,21 +166,23 @@ void Game::handleEvents() {
 }
 
 // Checks for collision between player and map objects
-bool Game::collision_player(PositionComponent Player) {
-    for (GameObject& obj : map->objects) {
-        // Simple AABB collision detection
-        if (Player.x() < obj.GetXPos() + 64 &&
-            Player.x() + 16 > obj.GetXPos() &&
-            Player.y() < obj.GetYPos() + 64 &&
-            Player.y() + 16 > obj.GetYPos()) {
-                
-            // Collision detected, handle accordingly (e.g., stop movement, change texture, etc.)
-            std::cout << "Collision Detected!" << std::endl;
-            
-            return true;
+void Game::collision_player() {
+    if (!Player.hasComponent<ColliderComponent>()) {
+        return;
+    }
+    const SDL_FRect Player_col = Player.getComponent<ColliderComponent>().getCollider();
+    Entity* check[] = {&Tree_0, &Tree_1, &Tree_2};
+    for (Entity* e : check) {
+        if (!e->hasComponent<ColliderComponent>()) {
+            continue;
+        }
+        const SDL_FRect checkRect = e->getComponent<ColliderComponent>().getCollider();
+        if (collides(Player_col,checkRect)) {
+            std::cout<<"Player collided"<<std::endl;
         }
     }
     return false;
+
 
 }
 
@@ -168,38 +192,45 @@ void Game::update() {
 
     // moves the player down at a constant rate until hitting bottom of screen
     auto& position = Player.getComponent<PositionComponent>();
-    if (position.y() < 480 - fallSpeed) {
+    if (position.y() < 550 - fallSpeed) {
         //Dont update if jumping above screen
         if(!(fallSpeed < 0 && position.y() < fallSpeed)){
             position.setPos(position.x(), position.y() + fallSpeed);
         }
-        
+
         //std::cout << position.y() << std::endl;
     }
     //This controls the fastest falling. Adjust the if statement to make faster/slower max fall
     if (fallSpeed < 10.0) {
         fallSpeed += 1.0;
     }
-    collision_player(position);
+    // Temporarily ignoring map collisions while testing player behavior.
+    // collision_player();
     manager.refresh();
     manager.update();
+    collision_player();
 }
 
 // Renders to screen
 void Game::render() {
+    SDL_SetRenderDrawColor(renderer,0,0,0,255);
     // Clear previous render
     SDL_RenderClear(renderer);
 
     // Add items to render
-    map->Draw_OBJ();
+    // Temporarily ignoring map rendering.
+    // map->Draw_OBJ();
     manager.draw();
     SDL_RenderPresent(renderer);
 }
 
 // Cleans up memory and quits SDL
 void Game::clean() {
+    delete map;
+    map = nullptr;
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
     std::cout<<"Game Closed" << std::endl;
 }
+//t
