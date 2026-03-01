@@ -4,6 +4,7 @@
 
 #include "SDL3/SDL.h"
 #include  "SDL3_image/SDL_image.h"
+#include "ECS/Component.h"
 #include <iostream>
 #include <vector>
 
@@ -16,7 +17,9 @@ public:
 
     Game();
     ~Game();
+    
     void init(const char* title,int width, int height, bool fullscreen);
+    bool collision_player(PositionComponent Player);
     void handleEvents();
     void update();
     void collision_player();

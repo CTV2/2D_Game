@@ -44,6 +44,16 @@ void GameObject::Update() {
     destR.w = srcR.w * 2;
     destR.h = srcR.h * 2;
 }
+
+float GameObject::GetXPos() {
+    return x_pos;
+}
+float GameObject::GetYPos() {
+    return y_pos;
+}
+
+
+
 void GameObject::PrintPos() {
     std::cout << "x_pos: " << x_pos << ", y_pos: " << y_pos << std::endl;
 }
