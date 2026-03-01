@@ -232,3 +232,4 @@ void Game::clean() {
     SDL_Quit();
     std::cout<<"Game Closed" << std::endl;
 }
+//t
