@@ -67,6 +67,9 @@ Map::Map(const std::vector<std::vector<int>>& grid) {
     destR.x = destR.y = 0;
 }
 
+Map::~Map() {
+}
+
 // Takes in 2D array and vector of objects and initializes each object in vector to correct texture and position based on 2D array
 void Map::Init_obj(const std::vector<std::vector<int>>& arr, std::vector<GameObject> &objects) {
     dirt = TextureManager::LoadTexture("textures/dirt.png");
@@ -106,7 +109,6 @@ void Map::Draw_OBJ() {
 }
 
 
-void Map::CreateMap_OBJ(string texture, float x, float y, ) {
-    GameObject obj(TextureManager::LoadTexture(texture.c_str()), x, y);
-    this->objects.push_back(obj);
+void Map::Create_OBJ(const char* texturesheet, float x, float y) {
+    this->objects.emplace_back(texturesheet, x, y);
 }

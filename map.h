@@ -15,7 +15,6 @@ public:
 
     void LoadMap(int arr[20][25]);
     void DrawMap();
-    void CreateMap_OBJ();
     void Init_obj(const std::vector<std::vector<int>>& arr, std::vector<GameObject>& objects);
     void Draw_OBJ();
     void Create_OBJ(const char* texturesheet, float x, float y);

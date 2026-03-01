@@ -14,7 +14,7 @@ int main(int argc,const char * argv[]) {
 
     // Creates Instance of Game and initializes it
     game = new Game;
-    game -> init("test",800,640,false);
+    game -> init("test",1280,720,false);
 
     // Begins game loop
     while (game -> running()) {

@@ -13,6 +13,7 @@ public:
     void ChangeTexturePreload(SDL_Texture* text);
     void ChangePos(float x, float y);
     void PrintPos();
+    const SDL_FRect& getDestRect() const { return destR; }
 private:
     float x_pos;
     float y_pos;

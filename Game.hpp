@@ -7,6 +7,8 @@
 #include <iostream>
 #include <vector>
 
+class Map;
+
 class Game {
 public:
     // Temp stuff for testing, will be removed later
@@ -17,6 +19,7 @@ public:
     void init(const char* title,int width, int height, bool fullscreen);
     void handleEvents();
     void update();
+    void collision_player();
     void render();
     void clean(); //mem cleaner
     bool running() {return isRunning;} // continue loop
@@ -26,5 +29,6 @@ private:
     int count;
     bool isRunning;
     SDL_Window * window;
+    Map* map;
 };
 #endif

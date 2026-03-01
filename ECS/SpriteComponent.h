@@ -10,12 +10,17 @@
 class SpriteComponent : public Component {
     public:
         SpriteComponent() = default;
-        SpriteComponent(const char* path) {
+        SpriteComponent(const char* path, float spriteScale = 0.20f) : scale(spriteScale) {
             setTexture(path);
         }
 
         void setTexture(const char* path) {
             texture = TextureManager::LoadTexture(path);
+        }
+        void setScale(float spriteScale) {
+            if (spriteScale > 0.0f) {
+                scale = spriteScale;
+            }
         }
         void init() override {
             position = &entity->getComponent<PositionComponent>();
@@ -31,7 +36,6 @@ class SpriteComponent : public Component {
             if (SDL_GetTextureSize(texture, &texW, &texH)) {
                 srcR.w = texW;
                 srcR.h = texH;
-                const float scale = 0.20f;
                 destR.w = texW * scale;
                 destR.h = texH * scale;
             } else {
@@ -50,6 +54,7 @@ class SpriteComponent : public Component {
     private:
     PositionComponent* position;
     SDL_Texture* texture;
+    float scale = 0.20f;
 
     SDL_FRect srcR,destR;
 
