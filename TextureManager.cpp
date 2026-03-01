@@ -1,5 +1,6 @@
 // Implements helper functions for loading textures and drawing textured rectangles with SDL.
 #include "TextureManager.h"
+#include "Game.hpp"
 
 
 SDL_Texture *TextureManager::LoadTexture(const char* texture) {

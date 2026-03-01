@@ -181,7 +181,6 @@ void Game::collision_player() {
             std::cout<<"Player collided"<<std::endl;
         }
     }
-    return false;
 
 
 }

@@ -45,12 +45,6 @@ void GameObject::Update() {
     destR.h = srcR.h * 2;
 }
 
-float GameObject::GetXPos() {
-    return x_pos;
-}
-float GameObject::GetYPos() {
-    return y_pos;
-}
 
 
 
