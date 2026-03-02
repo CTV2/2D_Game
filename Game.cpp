@@ -153,7 +153,7 @@ void Game::handleEvents() {
                     if (event.key.key == SDLK_A) {
                         //move left
                         auto& position = Player->getComponent<PositionComponent>();
-                        const float moveDist = 5.0; // change this to speed or slow
+                        const float moveDist = 20.0; // change this to speed or slow
                         if (position.x() > -30 - moveDist) {
                             position.setPos(position.x() - moveDist, position.y());
                             //std::cout << position.x() << std::endl;
@@ -162,7 +162,7 @@ void Game::handleEvents() {
                     if (event.key.key == SDLK_D) {
                         //move right
                         auto& position = Player->getComponent<PositionComponent>();
-                        const float moveDist = 5.0; // change this to speed or slow
+                        const float moveDist =20.0; // change this to speed or slow
                         if (position.x() < 1280 - moveDist) {
                         position.setPos(position.x() + moveDist, position.y());
                         //std::cout << position.x() << std::endl;
@@ -238,7 +238,7 @@ void Game::update() {
         Entity* tree = Tree_list[i];
         auto& pos = tree->getComponent<PositionComponent>();
         pos.setPos(pos.x() - 5, pos.y());
-        if (pos.x() < -200) {
+        if (pos.x() < -300) {
             tree->destroy();
             score += 1;
             Tree_list.erase(Tree_list.begin() + i);
