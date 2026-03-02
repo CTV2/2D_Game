@@ -427,7 +427,7 @@ void Game::spawnSpike() {
 
     Entity* newSpike = &manager.addEntity();
 
-    // Add components
+    // Add components Done By AI Because Changing sprite last minute changed hitboxes
     newSpike->addComponent<PositionComponent>(1200, 645);
     auto& spikeSprite = newSpike->addComponent<SpriteComponent>("textures/Spikes.png", 0.50f);
     const SDL_FRect& spikeDest = spikeSprite.getDestRect();
