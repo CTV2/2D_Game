@@ -238,7 +238,7 @@ void Game::update() {
         Entity* tree = Tree_list[i];
         auto& pos = tree->getComponent<PositionComponent>();
         pos.setPos(pos.x() - 5, pos.y());
-        if (pos.x() < -200) {
+        if (pos.x() < -400) {
             tree->destroy();
             score += 1;
             Tree_list.erase(Tree_list.begin() + i);
