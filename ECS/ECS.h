@@ -40,7 +40,7 @@ class Component {
         virtual void update(){}
         virtual void draw(){}
 
-        virtual ~Component(){}
+        virtual ~Component() = default;
 };
 
 class Entity {
@@ -103,6 +103,10 @@ class Manager {
                 return !mEntity -> isActive();
             }),
             std::end(entities));
+    }
+    void clear() {
+        for (auto& e : entities) e -> destroy();
+        refresh();
     }
 
     // Creates, stores, and returns a new entity owned by the manager.

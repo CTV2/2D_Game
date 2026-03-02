@@ -36,13 +36,10 @@ std::vector<std::vector<int>> generateMap() {
 
 SDL_Renderer* Game::renderer = nullptr;
 Manager manager;
-auto& Player(manager.addEntity());
-auto& Tree_0(manager.addEntity());
-auto& Tree_1(manager.addEntity());
-auto& Tree_2(manager.addEntity());
-auto& Spikes(manager.addEntity());
+Entity* Player = nullptr;
 
-std::vector<Entity*> Tree_list = {&Tree_0, &Tree_1, &Tree_2, &Spikes};
+std::vector<Entity*> Tree_list;
+
 
 // Constructor and Destructor  < -------- Not sure if these are necessary, but they are here for now.
 Game::Game() {
@@ -105,22 +102,7 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
             isRunning = false;
         }
 
-        // Initialize map and player entity with position and sprite components
-        map = new Map(generateMap());
-        Player.addComponent<PositionComponent>();
-        Player.addComponent<ColliderComponent>(16, 16);
-        Tree_0.addComponent<PositionComponent>(0,430);
-        Tree_1.addComponent<PositionComponent>(500,430);
-        Tree_2.addComponent<PositionComponent>(1000,430);
-        Tree_0.addComponent<ColliderComponent>(120, 120, 15, 10);
-        Tree_1.addComponent<ColliderComponent>(70, 120, 15, 10);
-        Tree_2.addComponent<ColliderComponent>(70, 120, 15, 10);
-        Spikes.addComponent<PositionComponent>();
-        //Spikes.addComponent<SpriteComponent>("textures/spikes.png");
-        Tree_0.addComponent<SpriteComponent>("textures/up_tree.png",0.50);
-        Tree_1.addComponent<SpriteComponent>("textures/up_tree.png",0.50);
-        Tree_2.addComponent<SpriteComponent>("textures/up_tree.png",0.50);
-        Player.addComponent<SpriteComponent>("textures/Reaper.png");
+        
     }
 }
 
@@ -143,6 +125,17 @@ void Game::handleEvents() {
                 if (currentState == GameState::MENU) {
                     if (event.key.key == SDLK_RETURN) {
                         currentState = GameState::PLAYING;
+                        Player = &manager.addEntity();
+                        // Initialize map and player entity with position and sprite components
+
+                        Player->addComponent<PositionComponent>();
+                        Player->addComponent<ColliderComponent>(16, 16);
+                        Player->addComponent<SpriteComponent>("textures/Reaper.png");
+                        Game::randomSpawn();
+                        // Tree_0->addComponent<PositionComponent>(0,430);
+                        // Tree_0->addComponent<ColliderComponent>(120, 120, 15, 10);
+                        // Tree_0->addComponent<SpriteComponent>("textures/up_tree.png",0.50);
+                       
                     }
                     if (event.key.key == SDLK_ESCAPE) {
                         isRunning = false;
@@ -152,14 +145,14 @@ void Game::handleEvents() {
                         // PLAYING controls
                     if (event.key.key == SDLK_W) {
                         //jump, change logic later to say if not falling
-                        auto& position = Player.getComponent<PositionComponent>();
+                        auto& position = Player->getComponent<PositionComponent>();
                         if(fallSpeed >= 1.0 && position.y() > fallSpeed){
-                            fallSpeed = -10.0;
+                            fallSpeed = -20.0;
                         }
                     }
                     if (event.key.key == SDLK_A) {
                         //move left
-                        auto& position = Player.getComponent<PositionComponent>();
+                        auto& position = Player->getComponent<PositionComponent>();
                         const float moveDist = 5.0; // change this to speed or slow
                         if (position.x() > -30 - moveDist) {
                             position.setPos(position.x() - moveDist, position.y());
@@ -168,9 +161,9 @@ void Game::handleEvents() {
                     }
                     if (event.key.key == SDLK_D) {
                         //move right
-                        auto& position = Player.getComponent<PositionComponent>();
+                        auto& position = Player->getComponent<PositionComponent>();
                         const float moveDist = 5.0; // change this to speed or slow
-                        if (position.x() < 665 - moveDist) {
+                        if (position.x() < 1280 - moveDist) {
                         position.setPos(position.x() + moveDist, position.y());
                         //std::cout << position.x() << std::endl;
                         }
@@ -187,18 +180,29 @@ void Game::handleEvents() {
 
 // Checks for collision between player and map objects
 void Game::collision_player() {
-    if (!Player.hasComponent<ColliderComponent>()) {
+    if (!Player->hasComponent<ColliderComponent>()) {
         return;
     }
-    const SDL_FRect Player_col = Player.getComponent<ColliderComponent>().getCollider();
-    Entity* check[] = {&Tree_0, &Tree_1, &Tree_2};
-    for (Entity* e : check) {
+
+    const SDL_FRect Player_col = Player->getComponent<ColliderComponent>().getCollider();
+
+    // Here is the list of objects we want to check for collision with. We can add more as needed, but for now we will just check the trees and spikes.
+    // Entity* check[] = {Tree_0}; //  {&Tree_0, &Tree_1, &Tree_2}
+    for (Entity* e : Tree_list) {
         if (!e->hasComponent<ColliderComponent>()) {
             continue;
         }
         const SDL_FRect checkRect = e->getComponent<ColliderComponent>().getCollider();
         if (collides(Player_col,checkRect)) {
-            std::cout<<"Player collided"<<std::endl;
+            currentState = GameState::MENU;
+            fallSpeed = 0;
+            manager.clear();
+            Tree_list.clear();
+        
+
+            break;
+            
+
         }
     }
 
@@ -213,7 +217,7 @@ void Game::update() {
         return;
 
     // moves the player down at a constant rate until hitting bottom of screen
-    auto& position = Player.getComponent<PositionComponent>();
+    auto& position = Player->getComponent<PositionComponent>();
     if (position.y() < 550 - fallSpeed) {
         //Dont update if jumping above screen
         if(!(fallSpeed < 0 && position.y() < fallSpeed)){
@@ -226,11 +230,14 @@ void Game::update() {
     if (fallSpeed < 10.0) {
         fallSpeed += 1.0;
     }
-    for (auto& tree : Tree_list) {
+    for (int i = Tree_list.size() - 1; i >= 0; i--) {
+        Entity* tree = Tree_list[i];
         auto& pos = tree->getComponent<PositionComponent>();
         pos.setPos(pos.x() - 5, pos.y());
         if (pos.x() < -200) {
-            pos.setPos(700, pos.y());
+            tree->destroy();
+            Tree_list.erase(Tree_list.begin() + i);
+            Game::randomSpawn();
         }
     }
     // Temporarily ignoring map collisions while testing player behavior.
@@ -272,4 +279,39 @@ void Game::clean() {
     SDL_Quit();
     std::cout<<"Game Closed" << std::endl;
 }
-//t
+
+void Game::spawnTree() {
+
+    Entity* newTree = &manager.addEntity();
+
+    // Add components
+    newTree->addComponent<PositionComponent>(1200, 480);
+    newTree->addComponent<ColliderComponent>(120, 120, 15, 10);
+    newTree->addComponent<SpriteComponent>("textures/up_tree.png", 0.50);
+
+    // Add to the tree list
+    Tree_list.push_back(newTree);
+}
+
+void Game::spawnSpike() {
+
+    Entity* newSpike = &manager.addEntity();
+
+    // Add components
+    newSpike->addComponent<PositionComponent>(1200, 480);
+    newSpike->addComponent<ColliderComponent>(120, 120, 15, 10);
+    newSpike->addComponent<SpriteComponent>("textures/Spikes.png", 0.50);
+
+    // Add to the tree list
+    Tree_list.push_back(newSpike);
+
+}
+
+void Game::randomSpawn() {
+    int randNum = rand() % 2; // Random number between 0 and 1
+    if (randNum == 0) {
+        spawnTree();
+    } else {
+        spawnSpike();
+    }
+}

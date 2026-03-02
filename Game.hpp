@@ -34,6 +34,9 @@ public:
     void render();
     void clean(); //mem cleaner
     bool running() {return isRunning;} // continue loop
+    void randomSpawn();
+    void spawnTree();
+    void spawnSpike();
 
     static SDL_Renderer* renderer;
 private:
