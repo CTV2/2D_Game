@@ -6,6 +6,7 @@
 
 
 bool reset  = true;
+int score = 0;
 
 // Temp stuff for testing, will be removed later
 std::vector<std::vector<int>> generateMap() {
@@ -197,6 +198,7 @@ void Game::collision_player() {
             fallSpeed = 0;
             manager.clear();
             Tree_list.clear();
+            std::cout << score << std::endl;
 
 
             break;
@@ -238,6 +240,7 @@ void Game::update() {
         pos.setPos(pos.x() - 5, pos.y());
         if (pos.x() < -200) {
             tree->destroy();
+            score += 1;
             Tree_list.erase(Tree_list.begin() + i);
             Game::randomSpawn();
         }
