@@ -5,7 +5,7 @@
 #include <vector>
 
 
-
+bool reset  = true;
 
 // Temp stuff for testing, will be removed later
 std::vector<std::vector<int>> generateMap() {
@@ -102,7 +102,7 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
             isRunning = false;
         }
 
-        
+
     }
 }
 
@@ -135,7 +135,7 @@ void Game::handleEvents() {
                         // Tree_0->addComponent<PositionComponent>(0,430);
                         // Tree_0->addComponent<ColliderComponent>(120, 120, 15, 10);
                         // Tree_0->addComponent<SpriteComponent>("textures/up_tree.png",0.50);
-                       
+
                     }
                     if (event.key.key == SDLK_ESCAPE) {
                         isRunning = false;
@@ -146,8 +146,9 @@ void Game::handleEvents() {
                     if (event.key.key == SDLK_W) {
                         //jump, change logic later to say if not falling
                         auto& position = Player->getComponent<PositionComponent>();
-                        if(fallSpeed >= 1.0 && position.y() > fallSpeed){
-                            fallSpeed = -20.0;
+                        if(fallSpeed >= 1.0 && position.y() > fallSpeed && reset == true) {
+                            fallSpeed = -30.0;
+                            reset = false;
                         }
                     }
                     if (event.key.key == SDLK_A) {
@@ -198,10 +199,10 @@ void Game::collision_player() {
             fallSpeed = 0;
             manager.clear();
             Tree_list.clear();
-        
+
 
             break;
-            
+
 
         }
     }
@@ -225,6 +226,9 @@ void Game::update() {
         }
 
         //std::cout << position.y() << std::endl;
+    }
+    else {
+        reset = true;
     }
     //This controls the fastest falling. Adjust the if statement to make faster/slower max fall
     if (fallSpeed < 10.0) {
