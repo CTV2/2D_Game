@@ -199,7 +199,7 @@ void Game::collision_player() {
             manager.clear();
             Tree_list.clear();
             std::cout << score << std::endl;
-
+            score = 0;
 
             break;
 
