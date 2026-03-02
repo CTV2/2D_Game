@@ -200,6 +200,7 @@ void Game::collision_player() {
             fallSpeed = 0;
             manager.clear();
             Tree_list.clear();
+            std::cout << score << std::endl;
 
 
             break;
