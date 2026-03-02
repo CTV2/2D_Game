@@ -300,8 +300,8 @@ void Game::spawnSpike() {
     Entity* newSpike = &manager.addEntity();
 
     // Add components
-    newSpike->addComponent<PositionComponent>(1200, 480);
-    newSpike->addComponent<ColliderComponent>(120, 120, 15, 10);
+    newSpike->addComponent<PositionComponent>(1200, 645);
+    newSpike->addComponent<ColliderComponent>(350, 100, -50,-100);
     newSpike->addComponent<SpriteComponent>("textures/Spikes.png", 0.50);
 
     // Add to the tree list
