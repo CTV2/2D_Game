@@ -42,6 +42,8 @@ auto& Tree_1(manager.addEntity());
 auto& Tree_2(manager.addEntity());
 auto& Spikes(manager.addEntity());
 
+std::vector<Entity*> Tree_list = {&Tree_0, &Tree_1, &Tree_2, &Spikes};
+
 // Constructor and Destructor  < -------- Not sure if these are necessary, but they are here for now.
 Game::Game() {
     map = nullptr;
@@ -223,6 +225,13 @@ void Game::update() {
     //This controls the fastest falling. Adjust the if statement to make faster/slower max fall
     if (fallSpeed < 10.0) {
         fallSpeed += 1.0;
+    }
+    for (auto& tree : Tree_list) {
+        auto& pos = tree->getComponent<PositionComponent>();
+        pos.setPos(pos.x() - 5, pos.y());
+        if (pos.x() < -200) {
+            pos.setPos(700, pos.y());
+        }
     }
     // Temporarily ignoring map collisions while testing player behavior.
     // collision_player();
