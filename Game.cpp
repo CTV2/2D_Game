@@ -5,7 +5,7 @@
 #include <vector>
 
 
-bool reset  = true;
+bool reset  = false;
 int score = 0;
 
 // Temp stuff for testing, will be removed later
