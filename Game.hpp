@@ -10,10 +10,18 @@
 
 class Map;
 
+// Define class for start menu
+enum class GameState {
+    MENU,
+    PLAYING,
+    QUIT
+};
+
 class Game {
 public:
     // Temp stuff for testing, will be removed later
     float fallSpeed = 0.5; // change this to speed or slow
+    GameState currentState = GameState::MENU;
 
     Game();
     ~Game();
@@ -34,4 +42,6 @@ private:
     SDL_Window * window;
     Map* map;
 };
+
+
 #endif

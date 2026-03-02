@@ -5,6 +5,8 @@
 #include <vector>
 
 
+
+
 // Temp stuff for testing, will be removed later
 std::vector<std::vector<int>> generateMap() {
     const int rows = 20;
@@ -57,6 +59,10 @@ bool collides(const SDL_FRect& a, const SDL_FRect& b) {
 
 // Creates instance of game
 void Game::init(const char *title,int width, int height, bool fullscreen) {
+
+
+    // Sets game state to menu
+    GameState currentState = GameState::MENU;
 
     // Sets up flags for SDL (Just fullscreen for now, but can be expanded later if needed)
     int flags = 0;
@@ -131,29 +137,41 @@ void Game::handleEvents() {
                 break;
             //key is pressed
             case SDL_EVENT_KEY_DOWN:
-                if (event.key.key == SDLK_W) {
-                    //jump, change logic later to say if not falling
-                    auto& position = Player.getComponent<PositionComponent>();
-                    if(fallSpeed >= 1.0 && position.y() > fallSpeed){
-                        fallSpeed = -10.0;
+                // MENU controls
+                if (currentState == GameState::MENU) {
+                    if (event.key.key == SDLK_RETURN) {
+                        currentState = GameState::PLAYING;
+                    }
+                    if (event.key.key == SDLK_ESCAPE) {
+                        isRunning = false;
                     }
                 }
-                if (event.key.key == SDLK_A) {
-                    //move left
-                    auto& position = Player.getComponent<PositionComponent>();
-                    const float moveDist = 5.0; // change this to speed or slow
-                    if (position.x() > -30 - moveDist) {
-                         position.setPos(position.x() - moveDist, position.y());
-                         //std::cout << position.x() << std::endl;
+                else if(currentState == GameState::PLAYING) {
+                        // PLAYING controls
+                    if (event.key.key == SDLK_W) {
+                        //jump, change logic later to say if not falling
+                        auto& position = Player.getComponent<PositionComponent>();
+                        if(fallSpeed >= 1.0 && position.y() > fallSpeed){
+                            fallSpeed = -10.0;
+                        }
                     }
-                }
-                if (event.key.key == SDLK_D) {
-                    //move right
-                    auto& position = Player.getComponent<PositionComponent>();
-                    const float moveDist = 5.0; // change this to speed or slow
-                    if (position.x() < 665 - moveDist) {
-                       position.setPos(position.x() + moveDist, position.y());
-                       //std::cout << position.x() << std::endl;
+                    if (event.key.key == SDLK_A) {
+                        //move left
+                        auto& position = Player.getComponent<PositionComponent>();
+                        const float moveDist = 5.0; // change this to speed or slow
+                        if (position.x() > -30 - moveDist) {
+                            position.setPos(position.x() - moveDist, position.y());
+                            //std::cout << position.x() << std::endl;
+                        }
+                    }
+                    if (event.key.key == SDLK_D) {
+                        //move right
+                        auto& position = Player.getComponent<PositionComponent>();
+                        const float moveDist = 5.0; // change this to speed or slow
+                        if (position.x() < 665 - moveDist) {
+                        position.setPos(position.x() + moveDist, position.y());
+                        //std::cout << position.x() << std::endl;
+                        }
                     }
                 }
                 break;
@@ -189,6 +207,9 @@ void Game::collision_player() {
 // Updates game state
 void Game::update() {
 
+    if (currentState != GameState::PLAYING)
+        return;
+
     // moves the player down at a constant rate until hitting bottom of screen
     auto& position = Player.getComponent<PositionComponent>();
     if (position.y() < 550 - fallSpeed) {
@@ -216,10 +237,20 @@ void Game::render() {
     // Clear previous render
     SDL_RenderClear(renderer);
 
-    // Add items to render
-    // Temporarily ignoring map rendering.
-    // map->Draw_OBJ();
-    manager.draw();
+    if (currentState == GameState::MENU) {
+
+        // Simple menu background
+        SDL_SetRenderDrawColor(renderer, 30, 30, 60, 255);
+        SDL_FRect rect = { 200, 200, 400, 200 };
+        SDL_RenderFillRect(renderer, &rect);
+    }
+    else if (currentState == GameState::PLAYING) {
+        // Add items to render
+        // Temporarily ignoring map rendering.
+        // map->Draw_OBJ();
+        manager.draw();
+    }
+
     SDL_RenderPresent(renderer);
 }
 
