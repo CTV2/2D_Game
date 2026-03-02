@@ -132,10 +132,6 @@ void Game::handleEvents() {
                         Player->addComponent<ColliderComponent>(16, 16);
                         Player->addComponent<SpriteComponent>("textures/Reaper.png");
                         Game::randomSpawn();
-                        // Tree_0->addComponent<PositionComponent>(0,430);
-                        // Tree_0->addComponent<ColliderComponent>(120, 120, 15, 10);
-                        // Tree_0->addComponent<SpriteComponent>("textures/up_tree.png",0.50);
-                       
                     }
                     if (event.key.key == SDLK_ESCAPE) {
                         isRunning = false;
