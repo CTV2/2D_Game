@@ -13,17 +13,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIG>")
 # This assumes the SDL source is available in vendored/SDL
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
+add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
+add_subdirectory(vendored/SDL_mixer EXCLUDE_FROM_ALL)
 
-# Box2D v3.1.0
-FetchContent_Declare(
-        box2d
-        GIT_REPOSITORY https://github.com/erincatto/box2d.git
-        GIT_TAG        v3.1.0
-        GIT_SHALLOW    TRUE
-)
-set(BOX2D_SAMPLES OFF CACHE BOOL "" FORCE)
-set(BOX2D_UNIT_TESTS OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(box2d)
+
+
 
 
 
@@ -43,7 +37,6 @@ add_executable(2dp WIN32 main.cpp
         ECS/PositionComponent.h)
 
 # Link to the actual SDL3 and glm libraries.
-target_link_libraries(2dp PRIVATE SDL3_image::SDL3_image SDL3::SDL3 box2d::box2d)
-find_package(box2d CONFIG REQUIRED)
+target_link_libraries(2dp PRIVATE SDL3_mixer::SDL3_mixer SDL3_ttf::SDL3_ttf SDL3_image::SDL3_image SDL3::SDL3)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

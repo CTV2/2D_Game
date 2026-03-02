@@ -3,10 +3,16 @@
 #include "map.h"
 #include "ECS/Component.h"
 #include <vector>
+#include <SDL3_ttf/SDL_ttf.h>
+//#include <SDL3_mixer/SDL_mixer.h>
+
 
 
 bool reset  = false;
 int score = 0;
+int final_score = 0;
+static TTF_Font *font = NULL;
+
 
 // Temp stuff for testing, will be removed later
 std::vector<std::vector<int>> generateMap() {
@@ -61,6 +67,18 @@ bool collides(const SDL_FRect& a, const SDL_FRect& b) {
 void Game::init(const char *title,int width, int height, bool fullscreen) {
 
 
+
+    if (!TTF_Init()) {
+        SDL_Log("Couldn't initialize SDL_ttf: %s\n", SDL_GetError());
+        SDL_Log("TTF failed: %s", SDL_GetError());
+    }
+
+    /* Open the font */
+    font = TTF_OpenFont("textures/buzz.ttf", 150);
+    if (!font) {
+        SDL_Log("Couldn't open font: %s\n", SDL_GetError());
+
+    }
     // Sets game state to menu
     GameState currentState = GameState::MENU;
 
@@ -199,6 +217,7 @@ void Game::collision_player() {
             manager.clear();
             Tree_list.clear();
             std::cout << score << std::endl;
+            final_score = score;
             score = 0;
 
             break;
@@ -213,7 +232,6 @@ void Game::collision_player() {
 
 // Updates game state
 void Game::update() {
-
     if (currentState != GameState::PLAYING)
         return;
 
@@ -259,13 +277,57 @@ void Game::render() {
     SDL_RenderClear(renderer);
 
     if (currentState == GameState::MENU) {
+        SDL_Color textColor = {255, 255, 255, 255};
+        SDL_Color bgColor   = {0, 0, 0, 225};
+        char score_buf[32];
+        SDL_snprintf(score_buf, sizeof(score_buf), "Score: %d", final_score);
 
-        // Simple menu background
-        SDL_SetRenderDrawColor(renderer, 30, 30, 60, 255);
-        SDL_FRect rect = { 200, 200, 400, 200 };
-        SDL_RenderFillRect(renderer, &rect);
+        if (font) {
+            SDL_Surface* text = TTF_RenderText_LCD(font, "Press Enter To Play", 0, textColor,bgColor);
+            if (text) {
+                SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, text);
+                SDL_DestroySurface(text);
+                if (tex) {
+                    SDL_FRect textDest = {350.0f, 250.0f, 500.0f, 200.f};
+                    SDL_RenderTexture(renderer, tex, nullptr, &textDest);
+                    SDL_DestroyTexture(tex);
+                }
+            }
+
+            SDL_Surface* menu_score = TTF_RenderText_LCD(font, score_buf, 0, textColor, bgColor);
+            if (menu_score) {
+                SDL_Texture* score_tex = SDL_CreateTextureFromSurface(renderer, menu_score);
+                SDL_DestroySurface(menu_score);
+                if (score_tex) {
+                    SDL_FRect scoreDest = {500.0f, 440.0f, 200.0f, 60.0f};
+                    SDL_RenderTexture(renderer, score_tex, nullptr, &scoreDest);
+                    SDL_DestroyTexture(score_tex);
+                }
+            }
+        }
+
+
     }
-    else if (currentState == GameState::PLAYING) {
+
+    if (currentState == GameState::PLAYING) {
+        SDL_Color textColor = {255, 255, 255, 255};
+        SDL_Color bgColor   = {0, 0, 0, 225};
+        char score_buf[32];
+        SDL_snprintf(score_buf, sizeof(score_buf), "Score: %d", score);
+        if (font) {
+            SDL_Surface* text = TTF_RenderText_LCD(font, score_buf, 0, textColor,bgColor);
+            if (text) {
+                SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, text);
+                SDL_DestroySurface(text);
+                if (tex) {
+                    SDL_FRect textDest = {1150, 15.0f, 100.0f, 40.f};
+                    SDL_RenderTexture(renderer, tex, nullptr, &textDest);
+                    SDL_DestroyTexture(tex);
+                }
+            }
+        }
+
+
         // Add items to render
         // Temporarily ignoring map rendering.
         // map->Draw_OBJ();

@@ -7,6 +7,8 @@
 #include "ECS/Component.h"
 #include <iostream>
 #include <vector>
+#include <SDL3_mixer/SDL_mixer.h>
+
 
 class Map;
 
@@ -25,7 +27,7 @@ public:
 
     Game();
     ~Game();
-    
+
     void init(const char* title,int width, int height, bool fullscreen);
     bool collision_player(PositionComponent Player);
     void handleEvents();
