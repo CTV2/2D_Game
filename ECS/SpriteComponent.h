@@ -51,6 +51,9 @@ class SpriteComponent : public Component {
             TextureManager::Draw(texture,srcR,destR);
 
         }
+        const SDL_FRect& getDestRect() const {
+            return destR;
+        }
     private:
     PositionComponent* position;
     SDL_Texture* texture;

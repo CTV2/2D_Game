@@ -181,8 +181,17 @@ void Game::handleEvents() {
                         // Initialize map and player entity with position and sprite components
 
                         Player->addComponent<PositionComponent>();
-                        Player->addComponent<ColliderComponent>(16, 16);
-                        Player->addComponent<SpriteComponent>("textures/Reaper.png");
+                        auto& playerSprite = Player->addComponent<SpriteComponent>("textures/astro.png", 0.14f);
+                        const SDL_FRect& playerDest = playerSprite.getDestRect();
+
+                        // Keep a tighter hitbox inside the sprite bounds for fair collision.
+                        const float hitboxInsetX = playerDest.w * 0.22f;
+                        const float hitboxInsetY = playerDest.h * 0.18f;
+                        float hitboxWidth = playerDest.w - (2.0f * hitboxInsetX);
+                        float hitboxHeight = playerDest.h - (2.0f * hitboxInsetY);
+                        if (hitboxWidth < 1.0f) hitboxWidth = 1.0f;
+                        if (hitboxHeight < 1.0f) hitboxHeight = 1.0f;
+                        Player->addComponent<ColliderComponent>(hitboxWidth, hitboxHeight, hitboxInsetX, hitboxInsetY);
                         Game::randomSpawn();
             
 
@@ -271,7 +280,7 @@ void Game::update() {
 
     // moves the player down at a constant rate until hitting bottom of screen
     auto& position = Player->getComponent<PositionComponent>();
-    if (position.y() < 550 - fallSpeed) {
+    if (position.y() < 480 - fallSpeed) {
         //Dont update if jumping above screen
         if(!(fallSpeed < 0 && position.y() < fallSpeed)){
             position.setPos(position.x(), position.y() + fallSpeed);
@@ -420,8 +429,18 @@ void Game::spawnSpike() {
 
     // Add components
     newSpike->addComponent<PositionComponent>(1200, 645);
-    newSpike->addComponent<ColliderComponent>(350, 100, -50,-100);
-    newSpike->addComponent<SpriteComponent>("textures/Spikes.png", 0.50);
+    auto& spikeSprite = newSpike->addComponent<SpriteComponent>("textures/Spikes.png", 0.50f);
+    const SDL_FRect& spikeDest = spikeSprite.getDestRect();
+
+    // Tighten collision to the visible spike tips to avoid early hits.
+    const float hitboxInsetX = spikeDest.w * 0.22f;
+    const float hitboxTopInset = spikeDest.h * 0.48f;
+    const float hitboxBottomInset = spikeDest.h * 0.08f;
+    float hitboxWidth = spikeDest.w - (2.0f * hitboxInsetX);
+    float hitboxHeight = spikeDest.h - hitboxTopInset - hitboxBottomInset;
+    if (hitboxWidth < 1.0f) hitboxWidth = 1.0f;
+    if (hitboxHeight < 1.0f) hitboxHeight = 1.0f;
+    newSpike->addComponent<ColliderComponent>(hitboxWidth, hitboxHeight, hitboxInsetX, hitboxTopInset);
 
     // Add to the tree list
     Tree_list.push_back(newSpike);
