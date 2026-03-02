@@ -4,7 +4,7 @@
 #include "ECS/Component.h"
 #include <vector>
 #include <SDL3_ttf/SDL_ttf.h>
-//#include <SDL3_mixer/SDL_mixer.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 
 
@@ -66,8 +66,6 @@ bool collides(const SDL_FRect& a, const SDL_FRect& b) {
 // Creates instance of game
 void Game::init(const char *title,int width, int height, bool fullscreen) {
 
-
-
     if (!TTF_Init()) {
         SDL_Log("Couldn't initialize SDL_ttf: %s\n", SDL_GetError());
         SDL_Log("TTF failed: %s", SDL_GetError());
@@ -80,7 +78,7 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
 
     }
     // Sets game state to menu
-    GameState currentState = GameState::MENU;
+    currentState = GameState::MENU;
 
     // Sets up flags for SDL (Just fullscreen for now, but can be expanded later if needed)
     int flags = 0;
@@ -89,7 +87,7 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
     }
 
     // Initializes SDL, error checks, and creates window and renderer. Also initializes map and player entity with position and sprite components.
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
         // Error Checking
         SDL_Log("SDL_Init failed: %s", SDL_GetError());
     }
@@ -122,6 +120,41 @@ void Game::init(const char *title,int width, int height, bool fullscreen) {
         }
 
 
+    }
+
+    if (isRunning) {
+        background = TextureManager::LoadTexture("textures/sky.jpg");
+        if (!background) {
+            SDL_Log("Failed to load background: %s", SDL_GetError());
+        }
+    }
+
+    if (isRunning) {
+        if (!MIX_Init()) {
+            SDL_Log("MIX_Init failed: %s", SDL_GetError());
+        } else {
+            mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+            if (!mixer) {
+                SDL_Log("MIX_CreateMixerDevice failed: %s", SDL_GetError());
+            } else {
+                musicAudio = MIX_LoadAudio(mixer, "textures/Nightmare.ogg", true);
+                if (!musicAudio) {
+                    SDL_Log("MIX_LoadAudio failed: %s", SDL_GetError());
+                } else {
+                    musicTrack = MIX_CreateTrack(mixer);
+                    if (!musicTrack) {
+                        SDL_Log("MIX_CreateTrack failed: %s", SDL_GetError());
+                    } else if (!MIX_SetTrackAudio(musicTrack, musicAudio)) {
+                        SDL_Log("MIX_SetTrackAudio failed: %s", SDL_GetError());
+                    } else {
+                        MIX_SetTrackLoops(musicTrack, -1);
+                        if (!MIX_PlayTrack(musicTrack, 0)) {
+                            SDL_Log("MIX_PlayTrack failed: %s", SDL_GetError());
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -235,6 +268,7 @@ void Game::update() {
     if (currentState != GameState::PLAYING)
         return;
 
+
     // moves the player down at a constant rate until hitting bottom of screen
     auto& position = Player->getComponent<PositionComponent>();
     if (position.y() < 550 - fallSpeed) {
@@ -275,7 +309,10 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer,0,0,0,255);
     // Clear previous render
     SDL_RenderClear(renderer);
-
+    if (background) {
+        SDL_FRect bgDest = {0.0f, 0.0f, 1280.0f, 720.0f}; // match your window size
+        SDL_RenderTexture(renderer, background, nullptr, &bgDest);
+    }
     if (currentState == GameState::MENU) {
         SDL_Color textColor = {255, 255, 255, 255};
         SDL_Color bgColor   = {0, 0, 0, 225};
@@ -341,6 +378,23 @@ void Game::render() {
 void Game::clean() {
     delete map;
     map = nullptr;
+    if (background) {
+        SDL_DestroyTexture(background);
+        background = nullptr;
+    }
+    if (musicTrack) {
+        MIX_DestroyTrack(musicTrack);
+        musicTrack = nullptr;
+    }
+    if (musicAudio) {
+        MIX_DestroyAudio(musicAudio);
+        musicAudio = nullptr;
+    }
+    if (mixer) {
+        MIX_DestroyMixer(mixer);
+        mixer = nullptr;
+    }
+    MIX_Quit();
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();

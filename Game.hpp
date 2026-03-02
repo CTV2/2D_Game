@@ -42,10 +42,14 @@ public:
 
     static SDL_Renderer* renderer;
 private:
+    SDL_Texture* background = nullptr;
     int count;
     bool isRunning;
     SDL_Window * window;
     Map* map;
+    MIX_Mixer* mixer = nullptr;
+    MIX_Audio* musicAudio = nullptr;
+    MIX_Track* musicTrack = nullptr;
 };
 
 
