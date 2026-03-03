@@ -39,6 +39,9 @@ public:
     void randomSpawn();
     void spawnTree();
     void spawnSpike();
+    void spawnAsteroid();
+    void updateTrees();
+    int updateAsteroids(int goal);
 
     static SDL_Renderer* renderer;
 private:

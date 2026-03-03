@@ -11,6 +11,7 @@
 bool reset  = false;
 int score = 0;
 int final_score = 0;
+int speed_change = 0;
 static TTF_Font *font = NULL;
 
 
@@ -46,6 +47,8 @@ Manager manager;
 Entity* Player = nullptr;
 
 std::vector<Entity*> Tree_list;
+std::vector<Entity*> Asteroid_list;
+int asteroid_spawn_goal = 0;
 
 
 // Constructor and Destructor  < -------- Not sure if these are necessary, but they are here for now.
@@ -248,7 +251,12 @@ void Game::collision_player() {
 
     // Here is the list of objects we want to check for collision with. We can add more as needed, but for now we will just check the trees and spikes.
     // Entity* check[] = {Tree_0}; //  {&Tree_0, &Tree_1, &Tree_2}
-    for (Entity* e : Tree_list) {
+    std::vector<Entity*> combined;
+
+    combined.insert(combined.end(), Tree_list.begin(), Tree_list.end());
+    combined.insert(combined.end(), Asteroid_list.begin(), Asteroid_list.end());
+
+    for (Entity* e : combined) {
         if (!e->hasComponent<ColliderComponent>()) {
             continue;
         }
@@ -258,9 +266,11 @@ void Game::collision_player() {
             fallSpeed = 0;
             manager.clear();
             Tree_list.clear();
+            Asteroid_list.clear();  
             std::cout << score << std::endl;
             final_score = score;
             score = 0;
+            asteroid_spawn_goal = 0;
 
             break;
 
@@ -295,17 +305,14 @@ void Game::update() {
     if (fallSpeed < 10.0) {
         fallSpeed += 1.0;
     }
-    for (int i = Tree_list.size() - 1; i >= 0; i--) {
-        Entity* tree = Tree_list[i];
-        auto& pos = tree->getComponent<PositionComponent>();
-        pos.setPos(pos.x() - 5, pos.y());
-        if (pos.x() < -400) {
-            tree->destroy();
-            score += 1;
-            Tree_list.erase(Tree_list.begin() + i);
-            Game::randomSpawn();
-        }
-    }
+    
+    // Moved these updates to seperate functions to avoid cluttering the main update function and to allow for different update logic for different object types if needed in the future.
+    if (score < 100) { float speed_change = float(int(score / 5));}
+    
+
+    Game::updateTrees();
+    asteroid_spawn_goal = Game::updateAsteroids(asteroid_spawn_goal);
+    
     // Temporarily ignoring map collisions while testing player behavior.
     // collision_player();
     manager.refresh();
@@ -447,11 +454,69 @@ void Game::spawnSpike() {
 
 }
 
+void Game::spawnAsteroid() {
+    Entity* newAsteroid = &manager.addEntity();
+
+    // Add components
+    float asteroidY = rand() % 300 + 25; // Random Y position between 50 and 450
+    newAsteroid->addComponent<PositionComponent>(1400, asteroidY);
+    newAsteroid->addComponent<ColliderComponent>(50, 50, 0, 0);
+    newAsteroid->addComponent<SpriteComponent>("textures/asteroid.png", 0.20f);
+
+    // Add to the asteroid list
+    Asteroid_list.push_back(newAsteroid);
+}
+
 void Game::randomSpawn() {
     int randNum = rand() % 2; // Random number between 0 and 1
     if (randNum == 0) {
         spawnTree();
     } else {
         spawnSpike();
+    }
+}
+
+
+int Game::updateAsteroids(int goal) {
+   
+    
+    if (score > 4 and goal <= 0) { // Spawn asteroids every 10 seconds
+        spawnAsteroid();
+        if (score < 29) { goal = rand() % (1000 - (speed_change * 100) - 400 + 1) + 400;}
+        else { goal = rand() % 300 + 100; } // Cap spawn rate at higher scores to avoid overwhelming the player.
+
+    }
+    else {
+        goal -= 1;
+    }
+
+    for (int i = Asteroid_list.size() - 1; i >= 0; i--) {
+        Entity* asteroid = Asteroid_list[i];
+        auto& pos = asteroid->getComponent<PositionComponent>();
+        
+        pos.setPos(pos.x() - 9 - speed_change, pos.y());
+        if (pos.x() < -400) {
+            asteroid->destroy();
+            score += 1;
+            Asteroid_list.erase(Asteroid_list.begin() + i);
+        }
+    }
+    return goal ;
+}
+
+void Game::updateTrees() {
+    
+    for (int i = Tree_list.size() - 1; i >= 0; i--) {
+        Entity* tree = Tree_list[i];
+        auto& pos = tree->getComponent<PositionComponent>();
+        
+
+        pos.setPos(pos.x() - 5 - speed_change, pos.y());
+        if (pos.x() < -400) {
+            tree->destroy();
+            score += 1;
+            Tree_list.erase(Tree_list.begin() + i);
+            Game::randomSpawn();
+        }
     }
 }
